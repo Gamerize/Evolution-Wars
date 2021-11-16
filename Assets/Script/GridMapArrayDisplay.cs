@@ -7,5 +7,19 @@ public class GridMapArrayDisplay : MonoBehaviour
     private void Start()
     {
         GridMap gridmap = new GridMap(50, 50);
+
+        for(int i = 0; i < 50; i++)
+        {
+            for(int j = 0; i < 50; i++)
+            {
+                TileSpawn(i, 1, j);
+            }
+        }
+    }
+
+    private void TileSpawn(int x, int y, int z)
+    {
+        GameObject Map = new GameObject("X: "+x+"Y: "+y);
+        Map.transform.position = new Vector3(24.5f + x, 1, -24.5f + y);
     }
 }
