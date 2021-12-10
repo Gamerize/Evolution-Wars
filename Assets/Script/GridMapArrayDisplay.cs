@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridMapArrayDisplay : MonoBehaviour
 {
+    public Transform player;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -54,16 +55,35 @@ public class GridMapArrayDisplay : MonoBehaviour
 
     }
 
+    public Node NodeFromWorldPoint(Vector3 worldPos)
+    {
+        for (int i = 0; i < gridWorldSize.x; i++)
+        {
+            for (int j = 0; j < gridWorldSize.y; j++)
+            {
+                //if(grid[i, j] = player.position)
+            }
+        }
+        int x = 0;
+        int y = 0;
+        return grid[x, y];
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+       Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)
         {
+            Node PlayerNode = NodeFromWorldPoint(player.position);
             foreach (Node n in grid)
             {
-                Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter-.1f));
+                if (PlayerNode == n)
+                {
+                    Gizmos.color = Color.cyan;
+                }
+               Gizmos.color = (n.walkable) ? Color.white : Color.red;
+               Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter-.1f));
             }
         }
     }
