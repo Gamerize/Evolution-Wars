@@ -73,13 +73,16 @@ public class GridMapArrayDisplay : MonoBehaviour
 
         if (grid != null)
         {
-            Node PlayerNode = NodeFromWorldPoint(player.position);
             foreach (Node n in grid)
             {
                 Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                if (PlayerNode.isEqual(n))
+                for (int i = 0; i < 20; i++)
                 {
-                    Gizmos.color = Color.blue;
+                    Node PlayerNode = NodeFromWorldPoint(player[i].position);
+                    if (PlayerNode.isEqual(n))
+                    {
+                        Gizmos.color = Color.blue;
+                    }
                 }
                 Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - .1f));
             }
