@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CodeMonkey.Utils;
 
 public class GridMap : MonoBehaviour
 {
@@ -21,9 +22,14 @@ public class GridMap : MonoBehaviour
         {
             for (int y = 0; y < gridMapArray.GetLength(1); y++)
             {
-                
+                UtilsClass.CreateWorldText(gridMapArray[x, y].ToString(), null, GetWorldPosition(x, y) ,20, Color.white, TextAnchor.MiddleCenter);
             }
         }
+    }
+
+    private Vector3 GetWorldPosition(int x, int z)
+    {
+        return new Vector3(x, 0, z) * cellsize;
     }
 
 }

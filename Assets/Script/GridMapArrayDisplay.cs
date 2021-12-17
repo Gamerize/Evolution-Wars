@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridMapArrayDisplay : MonoBehaviour
 {
-    public Transform player;
+    public Transform[] player;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -15,28 +15,28 @@ public class GridMapArrayDisplay : MonoBehaviour
 
     private void Start()
     {
-          
+
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         DrawGrid();
-        //GridMap gridmap = new GridMap(50, 50);
+        GridMap gridmap = new GridMap(20, 10, 10f);
 
-        //for (int i = 0; i < 50; i++)
-        //{
-        //    for (int j = 0; j < 50; j++)
-        //    {
-        //        TileSpawn(i, j);
-        //    }
-        //}
+        for (int i = 0; i < 50; i++)
+        {
+            for (int j = 0; j < 50; j++)
+            {
+                TileSpawn(i, j);
+            }
+        }
     }
 
-    /*private void TileSpawn(int x, int y)
+    private void TileSpawn(int x, int y)
     {
-        GameObject Map = new GameObject("X: "+x+" | Y: "+y);
+        GameObject Map = new GameObject("X: " + x + " | Y: " + y);
         Map.transform.SetParent(gameObject.transform);
         Map.transform.position = new Vector3(-24.5f + x, 1, -24.5f + y);
-    }*/
+    }
 
     void DrawGrid()
     {
@@ -57,34 +57,33 @@ public class GridMapArrayDisplay : MonoBehaviour
 
     public Node NodeFromWorldPoint(Vector3 worldPos)
     {
-        for (int i = 0; i < gridWorldSize.x; i++)
-        {
-            for (int j = 0; j < gridWorldSize.y; j++)
-            {
-                //if(grid[i, j] = player.position)
-            }
-        }
-        int x = 0;
-        int y = 0;
+        float percentX = (worldPos.x + gridWorldSize.x / 2) / gridWorldSize.x;
+        float percentY = (worldPos.z + gridWorldSize.y / 2) / gridWorldSize.y;
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
+        int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
     }
 
     private void OnDrawGizmos()
     {
-       Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)
         {
             Node PlayerNode = NodeFromWorldPoint(player.position);
             foreach (Node n in grid)
             {
-                if (PlayerNode == n)
+                Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                if (PlayerNode.isEqual(n))
                 {
-                    Gizmos.color = Color.cyan;
+                    Gizmos.color = Color.blue;
                 }
-               Gizmos.color = (n.walkable) ? Color.white : Color.red;
-               Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter-.1f));
+                Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - .1f));
             }
         }
     }
 }
+

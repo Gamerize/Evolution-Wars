@@ -12,4 +12,9 @@ public class Node : MonoBehaviour
         walkable = m_walkable;
         worldPos = m_worldPos;
     }
+
+    public bool isEqual(Node b)
+    {
+        return (worldPos.x == b.worldPos.x) && (worldPos.z == b.worldPos.z);
+    }
 }
