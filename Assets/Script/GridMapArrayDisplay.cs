@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GridMapArrayDisplay : MonoBehaviour
 {
     public Transform[] player;
@@ -20,22 +21,6 @@ public class GridMapArrayDisplay : MonoBehaviour
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         DrawGrid();
-        GridMap gridmap = new GridMap(20, 10, 10f);
-
-        for (int i = 0; i < 50; i++)
-        {
-            for (int j = 0; j < 50; j++)
-            {
-                TileSpawn(i, j);
-            }
-        }
-    }
-
-    private void TileSpawn(int x, int y)
-    {
-        GameObject Map = new GameObject("X: " + x + " | Y: " + y);
-        Map.transform.SetParent(gameObject.transform);
-        Map.transform.position = new Vector3(-24.5f + x, 1, -24.5f + y);
     }
 
     void DrawGrid()
@@ -55,16 +40,35 @@ public class GridMapArrayDisplay : MonoBehaviour
 
     }
 
+
     public Node NodeFromWorldPoint(Vector3 worldPos)
     {
         float percentX = (worldPos.x + gridWorldSize.x / 2) / gridWorldSize.x;
-        float percentY = (worldPos.z + gridWorldSize.y / 2) / gridWorldSize.y;
+        float percentY = (worldPos.z + gridWorldSize.y) / gridWorldSize.y;
         percentX = Mathf.Clamp01(percentX);
         percentY = Mathf.Clamp01(percentY);
 
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
+    }
+
+    public int NodeFromWorldPointX(Vector3 worldPos)
+    {
+        float percentX = (worldPos.x + gridWorldSize.x / 2) / gridWorldSize.x;
+        percentX = Mathf.Clamp01(percentX);
+
+        int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
+        return x;
+    }
+
+    public int NodeFromWorldPointY(Vector3 worldPos)
+    {
+        float percentY = (worldPos.z + gridWorldSize.y) / gridWorldSize.y;
+        percentY = Mathf.Clamp01(percentY);
+
+        int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
+        return y;
     }
 
     private void OnDrawGizmos()
@@ -76,7 +80,7 @@ public class GridMapArrayDisplay : MonoBehaviour
             foreach (Node n in grid)
             {
                 Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < player.Length; i++)
                 {
                     Node PlayerNode = NodeFromWorldPoint(player[i].position);
                     if (PlayerNode.isEqual(n))

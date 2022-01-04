@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node : MonoBehaviour
+[System.Serializable]
+public class Node
 {
     public bool walkable;
     public Vector3 worldPos;
+
+    public int MovCost;
 
     public Node(bool m_walkable, Vector3 m_worldPos)
     {
