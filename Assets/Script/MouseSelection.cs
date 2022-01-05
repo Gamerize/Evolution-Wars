@@ -12,12 +12,14 @@ public class MouseSelection : MonoBehaviour
 
     //layermask
     public LayerMask MapLayer;
-    public LayerMask UnitLayer;
+    public LayerMask PlayerLayer;
 
     //Vector3
     public Vector3 m_WorldPos;
     RaycastHit hitData;
     Ray ray;
+
+    bool PlayerSelected = false;
 
     //UI
     [SerializeField]TextMeshProUGUI m_StatsText;
@@ -29,13 +31,14 @@ public class MouseSelection : MonoBehaviour
 
     private void Update()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hitData, 1000, MapLayer))
         {
             m_WorldPos = hitData.point;
             Debug.DrawLine(ray.origin, hitData.transform.position, Color.red, 1);
-            Debug.Log(hitData.transform.gameObject);
             if (hitData.collider.tag == "Block")
             {
                 GridSelect.SetActive(true);
@@ -43,21 +46,37 @@ public class MouseSelection : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(ray, out hitData, 1000, MapLayer) && Input.GetMouseButtonDown(0) && hitData.collider.tag == "Block")
+        if (Input.GetMouseButtonDown(0))
         {
-            m_WorldPos = hitData.point;
-            Debug.DrawLine(ray.origin, hitData.transform.position, Color.red, 1);
-            Debug.Log(hitData.transform.gameObject);
+            if (Physics.Raycast(ray, out hitData, 1000, PlayerLayer))
+            {
+                PlayerSelected = true;
+                Debug.Log(hitData.transform.gameObject);
+                if (Input.GetKeyDown(0) && PlayerSelected)
+                {
+                    if (Physics.Raycast(ray, out hitData, 1000, MapLayer))
+                    {
+                        m_WorldPos = hitData.point;
+                        Debug.Log(hitData.transform.gameObject);
+                    }
+                }
+            }
         }
 
-        if (Physics.Raycast(ray, out hitData, 1000, UnitLayer) && Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
-            m_WorldPos = hitData.point;
-            Debug.DrawLine(ray.origin, hitData.transform.position, Color.red, 1);
-            Debug.Log(hitData.transform.gameObject);
-            if (hitData.collider.tag == "Player")
+            if (Physics.Raycast(ray, out hitData, 1000, PlayerLayer))
             {
-                
+                PlayerSelected = false;
+                m_WorldPos = hitData.point;
+                Debug.Log(hitData.transform.gameObject);
+                for (int i = 0; i < GridArray.player.Length; i++)
+                {
+                    if(GridArray.player[i] == hitData.transform.gameObject)
+                    {
+                        //display stats
+                    }
+                }
             }
         }
     }

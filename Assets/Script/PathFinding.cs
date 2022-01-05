@@ -24,7 +24,10 @@ public class PathFinding : MonoBehaviour
         while (OpenSet.Count > 0)
         {
             Node currentNode = OpenSet[0];
-
+            for(int i = 0; i < OpenSet.Count; i++)
+            {
+                
+            }
         }
     }
 }

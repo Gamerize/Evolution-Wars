@@ -50,6 +50,7 @@ public class GridMapArrayDisplay : MonoBehaviour
 
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
+
         return grid[x, y];
     }
 
@@ -69,6 +70,31 @@ public class GridMapArrayDisplay : MonoBehaviour
 
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return y;
+    }
+
+    public bool CheckPlayerNode(Vector3 PlayerPos)
+    {
+        if (grid != null)
+        {
+            foreach (Node n in grid)
+            {
+                Node PlayerNode = NodeFromWorldPoint(PlayerPos);
+                if (PlayerNode.isEqual(n))
+                {
+                    Debug.Log(PlayerPos);
+                    return true;
+                }
+                else return false;
+            }
+        }
+        return false;
+    }
+
+    public float GetNodeDistance(Node StartNode, Node TargetNode)
+    {
+        float DistX = Mathf.Abs(StartNode.worldPos.x - TargetNode.worldPos.x);
+        float DistY = Mathf.Abs(StartNode.worldPos.z - TargetNode.worldPos.z);
+        return DistX + DistY;
     }
 
     private void OnDrawGizmos()
