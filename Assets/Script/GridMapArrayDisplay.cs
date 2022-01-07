@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Code from Sebastian Lague
+
 [System.Serializable]
 public class GridMapArrayDisplay : MonoBehaviour
 {
@@ -71,6 +73,7 @@ public class GridMapArrayDisplay : MonoBehaviour
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return y;
     }
+
 
     public bool CheckPlayerNode(Vector3 PlayerPos)
     {

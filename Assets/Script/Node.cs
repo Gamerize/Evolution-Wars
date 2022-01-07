@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//code from Sebastian Lague
+
 [System.Serializable]
 public class Node
 {

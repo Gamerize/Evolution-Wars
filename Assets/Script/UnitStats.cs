@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UnitStats : MonoBehaviour
 {
@@ -16,14 +17,15 @@ public class UnitStats : MonoBehaviour
 
     public string Class;
 
+    public TextMeshProUGUI m_statsText;
+
     private void Start()
     {
         transform.position = StartingPos;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DisplayText()
     {
-        
+        m_statsText.text = "Class: " + Class + "\n--------\nStr: " + str + "\nDef: " + def + "\nSpd: " + spd + "\nSkl: " + skl + "\nLck:: " + lck + "\nMov: " + mov;
     }
 }
